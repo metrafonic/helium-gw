@@ -76,4 +76,11 @@ def add_gateway():
         return jsonify({"error": str(e)}), 500
 
 def create_app():
-   return app
+    global gateway_process
+    try:
+        # Start the gateway immediately when the app is created
+        gateway_process = subprocess.Popen(['./helium_gateway', '-c', settings_path, 'server'])
+        print("helium_gateway started on app startup")
+    except Exception as e:
+        print(f"Failed to start helium_gateway on startup: {e}")
+    return app
